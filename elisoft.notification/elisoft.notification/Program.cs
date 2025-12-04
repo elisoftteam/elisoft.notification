@@ -1,14 +1,17 @@
+using Serilog;
+using elisoft.notification.Infrastructure.Dependencies;
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
-var app = builder.Build();
+builder.Services.AddInfrastructure(builder.Configuration);
 
-// Configure the HTTP request pipeline.
+
+var app = builder.Build();
+var logger = app.Services.GetRequiredService<ILogger<Program>>();
+logger.LogInformation("START APLIKACJI: raz dwa trzy zmieniam tory");
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
