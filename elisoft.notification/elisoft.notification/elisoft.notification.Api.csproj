@@ -13,7 +13,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\elisoft.notification.Infrastructure\elisoft.notification.Infrastructure.csproj" />
+    <ProjectReference Include="..\elisoft.notification.Core\elisoft.notification.Infrastructure.csproj" />
+    <ProjectReference Include="..\elisoft.notification.Infrastructure\elisoft.notification.Slack.csproj" />
   </ItemGroup>
 
   <ItemGroup>

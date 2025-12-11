@@ -1,4 +1,4 @@
-﻿namespace elisoft.notification.Core.Interfaces
+﻿namespace elisoft.notification.Slack.Interfaces
 {
     public interface ISlackNotificationService
     {

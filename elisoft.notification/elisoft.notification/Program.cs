@@ -1,5 +1,5 @@
 using Serilog;
-using elisoft.notification.Infrastructure.Dependencies;
+using elisoft.notification.Infrascture.Dependencies;
 var builder = WebApplication.CreateBuilder(args);
 
 

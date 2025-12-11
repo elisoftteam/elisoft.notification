@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\elisoft.notification.Configuration\elisoft.notification.Configuration.csproj" />
+    <ProjectReference Include="..\elisoft.notification.Infrastructure\elisoft.notification.Slack.csproj" />
+  </ItemGroup>
+
+</Project>

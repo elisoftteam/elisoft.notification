@@ -1,10 +1,10 @@
 ﻿using elisoft.notification.Configuration.Configuration;
-using elisoft.notification.Core.Interfaces;
+using elisoft.notification.Slack.Interfaces;
 using Microsoft.Extensions.Logging;
 using System.Text;
 using System.Text.Json;
 
-namespace elisoft.notification.Infrastructure.Services
+namespace elisoft.notification.Slack.Services
 {
     public class SlackNotificationService : ISlackNotificationService
     {
@@ -33,20 +33,20 @@ namespace elisoft.notification.Infrastructure.Services
 
                 if (response.IsSuccessStatusCode)
                 {
-                    Console.WriteLine("sukces");
+                    _logger.LogInformation("udalo sie wyslac wiadomosc");
                     return true;
                 }
                 else
                 {
                     var errorBody = await response.Content.ReadAsStringAsync();
-                    Console.WriteLine($"blad: {response.StatusCode} - {errorBody}");
+                   _logger.LogError("nie udalo sie wyslac wiadomosci");
                     return false;
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"wyjatek: {ex.Message}");
-                return false;
+              _logger.LogError("wyjatek");
+              return false;
             }
         }
     }
