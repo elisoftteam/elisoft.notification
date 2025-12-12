@@ -90,3 +90,7 @@ BuildLog.*
 
 # User secrets (if used)
 secrets.json
+
+# Configuration files
+appsettings.json
+appsettings.Development.json

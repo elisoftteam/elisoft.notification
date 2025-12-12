@@ -1,5 +1,5 @@
+using elisoft.notification.Infrastructure.Dependencies;
 using Serilog;
-using elisoft.notification.Infrascture.Dependencies;
 var builder = WebApplication.CreateBuilder(args);
 
 
@@ -20,7 +20,5 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
-
 app.MapControllers();
-
 app.Run();

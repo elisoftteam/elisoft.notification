@@ -4,7 +4,7 @@ using elisoft.notification.Slack.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace elisoft.notification.Infrascture.Dependencies
+namespace elisoft.notification.Infrastructure.Dependencies
 {
     public static class DependencyInjection
     {

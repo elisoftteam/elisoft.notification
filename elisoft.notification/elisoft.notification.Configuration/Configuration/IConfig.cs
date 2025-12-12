@@ -9,6 +9,7 @@ namespace elisoft.notification.Configuration.Configuration
     public interface IConfig
     {
         string SlackWebhookUrl { get; }
-        string LogsDirectory { get; } 
+        string LogsDirectory { get; }
+        string ApiKey { get; }
     }
 }

@@ -36,6 +36,19 @@ namespace elisoft.notification.Configuration.Configuration
                 return _config["Slack:WebhookUrl"] ?? "";
             }
         }
+        public string ApiKey
+        {
+            get
+            {
+
+                if (string.IsNullOrWhiteSpace(_config["Authentication:ApiKey"]))
+                {
+                    throw new Exception("ApiKey is not set in appsettings.json");
+                }
+                return _config["Authentication:ApiKey"] ?? "";
+            }
+        }
     }
+
 
 }

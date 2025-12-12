@@ -13,12 +13,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\elisoft.notification.Configuration\elisoft.notification.Configuration.csproj" />
     <ProjectReference Include="..\elisoft.notification.Core\elisoft.notification.Infrastructure.csproj" />
     <ProjectReference Include="..\elisoft.notification.Infrastructure\elisoft.notification.Slack.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Controllers\" />
   </ItemGroup>
 
 </Project>

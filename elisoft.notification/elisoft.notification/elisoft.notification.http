@@ -1,6 +1,10 @@
 @elisoft.notification_HostAddress = http://localhost:5258
 
-GET {{elisoft.notification_HostAddress}}/weatherforecast/
-Accept: application/json
+POST {{elisoft.notification_HostAddress}}/api/Notification
+Content-Type: application/json
+
+{
+  "message": "test api"
+}
 
 ###
