@@ -1,7 +1,7 @@
 ﻿using Elisoft.Notificator.Configuration.Configuration;
 using System.Net;
 
-namespace Elisoft.Notification.Api.Middleware
+namespace Elisoft.Notificator.Api.Middleware
 {
   public class ApiKeyMiddleware
   {

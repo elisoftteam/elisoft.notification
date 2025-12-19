@@ -1,12 +1,14 @@
 @elisoft.notification_HostAddress = http://localhost:5258/
 
-POST {{elisoft.notification_HostAddress}}api/Notification/slack
+POST {{elisoft.notification_HostAddress}}api/Notification/send
 Content-Type: application/json
-X-API-KEY: XTd7wZYLSHbcdDRXPsxyVGeV8KfrU0JQ
+X-API-KEY: 
 
 {
-  "Channel": "Slack",
-  "Payload": {
-    "message": "test"
+  "channel": "Slack",
+  "payload": {
+    "webhookUrl": "",
+    "channelName": "",
+    "message": "test webhook url"
   }
 }

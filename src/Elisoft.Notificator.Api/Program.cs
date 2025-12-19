@@ -1,6 +1,5 @@
 using Elisoft.Notificator.Infrastructure.Dependencies;
-using Elisoft.Notification.Api.Middleware;
-using Serilog;
+using Elisoft.Notificator.Api.Middleware;
 var builder = WebApplication.CreateBuilder(args);
 
 

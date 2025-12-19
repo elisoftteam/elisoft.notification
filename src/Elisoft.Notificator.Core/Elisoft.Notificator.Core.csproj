@@ -7,12 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Paramore.Brighter.Extensions.DependencyInjection" Version="10.0.4" />
+    <PackageReference Include="Paramore.Brighter" Version="10.0.4" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Elisoft.Notificator.Configuration\Elisoft.Notificator.Configuration.csproj" />
-    <ProjectReference Include="..\Elisoft.Notificator.Core\Elisoft.Notificator.Core.csproj" />
     <ProjectReference Include="..\Elisoft.Notificator.Slack\Elisoft.Notificator.Slack.csproj" />
   </ItemGroup>
 
