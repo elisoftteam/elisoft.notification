@@ -174,5 +174,47 @@ namespace Elisoft.Notificator.Tests.Core
             // Assert
             result.Channel.ShouldBe(NotificationEnumChannel.Teams);
         }
+
+        [Test]
+        public void MapToNotification_ValidPushoverChannel_ReturnCorrectEnum()
+        {
+            // Arrange
+            var validPayload = JsonSerializer.Deserialize<JsonElement>("{}");
+            var model = new Message
+            {
+                Channel = "Pushover",
+                Payload = validPayload
+            };
+            var sut = new MessageMapper();
+
+
+            // Act
+            var result = sut.MapToNotification(model);
+
+
+            // Assert
+            result.Channel.ShouldBe(NotificationEnumChannel.Pushover);
+        }
+
+        [Test]
+        public void MapToNotification_ValidTwilioChannel_ReturnCorrectEnum()
+        {
+            // Arrange
+            var validPayload = JsonSerializer.Deserialize<JsonElement>("{}");
+            var model = new Message
+            {
+                Channel = "Twilio",
+                Payload = validPayload
+            };
+            var sut = new MessageMapper();
+
+
+            // Act
+            var result = sut.MapToNotification(model);
+
+
+            // Assert
+            result.Channel.ShouldBe(NotificationEnumChannel.Twilio);
+        }
     }
 }

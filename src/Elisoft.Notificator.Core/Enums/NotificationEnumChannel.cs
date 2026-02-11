@@ -7,6 +7,7 @@ namespace Elisoft.Notificator.Core.Enums
     {
         Slack,
         Teams,
-        Twilio
+        Twilio,
+        Pushover
     }
 }

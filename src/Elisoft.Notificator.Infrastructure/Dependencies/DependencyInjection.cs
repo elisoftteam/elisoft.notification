@@ -8,6 +8,7 @@ using Paramore.Brighter.Extensions.DependencyInjection;
 using Elisoft.Slack;
 using Elisoft.Notificator.Twilio.Services;
 using Elisoft.Teams.Services;
+using Elisoft.Pushover.Services;
 
 
 namespace Elisoft.Notificator.Infrastructure.Dependencies
@@ -23,11 +24,13 @@ namespace Elisoft.Notificator.Infrastructure.Dependencies
             services.AddHttpClient<ISlackNotificator, SlackNotificator>();
             services.AddHttpClient<ITeamsNotificator, TeamsNotificator>();
             services.AddHttpClient<ITwilioNotificator, TwilioNotificator>();
+            services.AddHttpClient<IPushoverNotificator, PushoverNotificator>();
             services.AddBrighter()
                 .AutoFromAssemblies(new[] {
                     typeof(SlackNotificationRequestHandler).Assembly,
                     typeof(TeamsNotificationRequestHandler).Assembly,
-                    typeof(TwilioNotificationRequestHandler).Assembly
+                    typeof(TwilioNotificationRequestHandler).Assembly,
+                    typeof(PushoverNotificationRequestHandler).Assembly
                     
                 });
             return services;

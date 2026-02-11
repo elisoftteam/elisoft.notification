@@ -109,6 +109,61 @@ namespace Elisoft.Notificator.Tests.Core
         }
 
         [Test]
+        public void CreateRequest_ValidPushoverPayload_ReturnPushoverNotificationRequestObject()
+        {
+            // Arrange
+            var channel = NotificationEnumChannel.Pushover;
+            var expectedMessage = _fixture.Create<string>();
+            var expectedTitle = _fixture.Create<string>();
+            var expectedPriority = _fixture.Create<int>();
+
+            var jsonString = JsonSerializer.Serialize(new
+            {
+                Message = expectedMessage,
+                Title = expectedTitle,
+                Priority = expectedPriority
+            });
+            var jsonPayload = JsonSerializer.Deserialize<JsonElement>(jsonString);
+
+
+            // Act
+            var result = _sut.CreateRequest(channel, jsonPayload);
+
+
+            // Assert
+            var pushoverRequest = result.ShouldBeOfType<PushoverNotificationRequest>();
+            pushoverRequest.Message.ShouldBe(expectedMessage);
+            pushoverRequest.Title.ShouldBe(expectedTitle);
+            pushoverRequest.Priority.ShouldBe(expectedPriority);
+        }
+
+        [Test]
+        public void CreateRequest_ValidTwilioPayload_ReturnTwilioNotificationRequestObject()
+        {
+            // Arrange
+            var channel = NotificationEnumChannel.Twilio;
+            var expectedTo = _fixture.Create<string>();
+            var expectedMessage = _fixture.Create<string>();
+
+            var jsonString = JsonSerializer.Serialize(new
+            {
+                To = expectedTo,
+                Message = expectedMessage
+            });
+            var jsonPayload = JsonSerializer.Deserialize<JsonElement>(jsonString);
+
+
+            // Act
+            var result = _sut.CreateRequest(channel, jsonPayload);
+
+
+            // Assert
+            var twilioRequest = result.ShouldBeOfType<TwilioNotificationRequest>();
+            twilioRequest.To.ShouldBe(expectedTo);
+            twilioRequest.Message.ShouldBe(expectedMessage);
+        }
+
+        [Test]
         public void CreateRequest_PayloadIsNull_ThrowArgumentException()
         {
             // Arrange

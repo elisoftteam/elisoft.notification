@@ -14,5 +14,7 @@ namespace Elisoft.Notificator.Configuration.Configuration
     string TwilioAccountSid { get; }
     string TwilioAuthToken { get; }
     string TwilioFromNumber { get; }
+    string PushoverApiToken { get; }
+    string PushoverUserKey { get; }
   }
 }

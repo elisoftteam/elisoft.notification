@@ -6,7 +6,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Elisoft.Slack;
 using Elisoft.Notificator.Configuration.Configuration;
+using Elisoft.Pushover.Services;
 using Elisoft.Teams.Services;
+using Elisoft.Notificator.Twilio.Services;
 using Microsoft.VisualStudio.TestPlatform.TestHost;
 
 
@@ -19,6 +21,8 @@ namespace Elisoft.Notificator.IntegrationTests
         private HttpClient _client;
         private ISlackNotificator _slackFake;
         private ITeamsNotificator _teamsFake;
+        private IPushoverNotificator _pushoverFake;
+        private ITwilioNotificator _twilioFake;
 
         [SetUp]
         public void SetUp()
@@ -26,9 +30,16 @@ namespace Elisoft.Notificator.IntegrationTests
             // Arrange
             _slackFake = A.Fake<ISlackNotificator>();
             _teamsFake = A.Fake<ITeamsNotificator>();
+            _pushoverFake = A.Fake<IPushoverNotificator>();
+            _twilioFake = A.Fake<ITwilioNotificator>();
 
             var configFake = A.Fake<IConfig>();
             A.CallTo(() => configFake.ApiKey).Returns("test-api-key");
+            A.CallTo(() => configFake.PushoverApiToken).Returns("test-token");
+            A.CallTo(() => configFake.PushoverUserKey).Returns("test-user");
+            A.CallTo(() => configFake.TwilioAccountSid).Returns("test-account-sid");
+            A.CallTo(() => configFake.TwilioAuthToken).Returns("test-auth-token");
+            A.CallTo(() => configFake.TwilioFromNumber).Returns("+15550001111");
 
             _factory = new WebApplicationFactory<Program>()
               .WithWebHostBuilder(builder =>
@@ -37,6 +48,8 @@ namespace Elisoft.Notificator.IntegrationTests
                   {
                       services.AddSingleton(_slackFake);
                       services.AddSingleton(_teamsFake);
+                      services.AddSingleton(_pushoverFake);
+                      services.AddSingleton(_twilioFake);
                       services.AddSingleton(configFake);
                   });
               });
@@ -139,6 +152,104 @@ namespace Elisoft.Notificator.IntegrationTests
 
             // Assert
             A.CallTo(() => _teamsFake.SendMessageAsync(
+                A<string>._,
+                A<string>._))
+                .MustHaveHappenedOnceExactly();
+        }
+
+        [Test]
+        public async Task SendNotification_validPushoverPayload_returnsOk()
+        {
+            // Arrange
+            var body = new
+            {
+                channel = "Pushover",
+                payload = new
+                {
+                    message = "hello",
+                    title = "notification",
+                    priority = 0
+                }
+            };
+
+            // Act
+            var response = await _client.PostAsJsonAsync("/api/notification/send", body);
+
+            // Assert
+            response.StatusCode.ShouldBe(HttpStatusCode.OK);
+        }
+
+        [Test]
+        public async Task SendNotification_validPushoverPayload_sendsMessageToPushover()
+        {
+            // Arrange
+            var body = new
+            {
+                channel = "Pushover",
+                payload = new
+                {
+                    message = "hello",
+                    title = "notification",
+                    priority = 0
+                }
+            };
+
+            // Act
+            await _client.PostAsJsonAsync("/api/notification/send", body);
+
+            // Assert
+            A.CallTo(() => _pushoverFake.SendMessageAsync(
+                A<string>._,
+                A<string>._,
+                A<string>._,
+                A<string?>._,
+                A<int?>._))
+                .MustHaveHappenedOnceExactly();
+        }
+
+        [Test]
+        public async Task SendNotification_validTwilioPayload_returnsOk()
+        {
+            // Arrange
+            var body = new
+            {
+                channel = "Twilio",
+                payload = new
+                {
+                    to = "+15550002222",
+                    message = "hello"
+                }
+            };
+
+            // Act
+            var response = await _client.PostAsJsonAsync("/api/notification/send", body);
+
+            // Assert
+            response.StatusCode.ShouldBe(HttpStatusCode.OK);
+        }
+
+        [Test]
+        public async Task SendNotification_validTwilioPayload_sendsMessageToTwilio()
+        {
+            // Arrange
+            var body = new
+            {
+                channel = "Twilio",
+                payload = new
+                {
+                    to = "+15550002222",
+                    message = "hello"
+                }
+            };
+
+            // Act
+            await _client.PostAsJsonAsync("/api/notification/send", body);
+
+            // Assert
+            A.CallTo(() => _twilioFake.SendSmsAsync(
+                A<string>._,
+                A<string>._,
+                A<string>._,
                 A<string>._,
                 A<string>._))
                 .MustHaveHappenedOnceExactly();

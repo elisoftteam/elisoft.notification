@@ -69,5 +69,29 @@ namespace Elisoft.Notificator.Configuration.Configuration
                 return _config["Twilio:FromNumber"] ?? "";
             }
         }
+
+        public string PushoverApiToken
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(_config["Pushover:ApiToken"]))
+                {
+                    throw new Exception("Pushover ApiToken is not set in appsettings.json");
+                }
+                return _config["Pushover:ApiToken"] ?? "";
+            }
+        }
+
+        public string PushoverUserKey
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(_config["Pushover:UserKey"]))
+                {
+                    throw new Exception("Pushover UserKey is not set in appsettings.json");
+                }
+                return _config["Pushover:UserKey"] ?? "";
+            }
+        }
     }
 }
