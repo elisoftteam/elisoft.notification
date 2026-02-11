@@ -13,6 +13,9 @@ artifacts/
 *.csproj.nuget.g.targets
 *.nuget.cache
 
+#API test
+Elisoft.Notificator.http
+
 # NuGet packages
 *.nupkg
 **/packages/*

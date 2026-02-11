@@ -83,6 +83,32 @@ namespace Elisoft.Notificator.Tests.Core
         }
 
         [Test]
+        public void CreateRequest_ValidTeamsPayload_ReturnTeamsNotificationRequestObject()
+        {
+            // Arrange
+            var channel = NotificationEnumChannel.Teams;
+            var expectedUrl = _fixture.Create<string>();
+            var expectedMessage = _fixture.Create<string>();
+
+            var jsonString = JsonSerializer.Serialize(new
+            {
+                WebhookUrl = expectedUrl,
+                Message = expectedMessage
+            });
+            var jsonPayload = JsonSerializer.Deserialize<JsonElement>(jsonString);
+
+
+            // Act
+            var result = _sut.CreateRequest(channel, jsonPayload);
+
+
+            // Assert
+            var teamsRequest = result.ShouldBeOfType<TeamsNotificationRequest>();
+            teamsRequest.WebhookUrl.ShouldBe(expectedUrl);
+            teamsRequest.Message.ShouldBe(expectedMessage);
+        }
+
+        [Test]
         public void CreateRequest_PayloadIsNull_ThrowArgumentException()
         {
             // Arrange

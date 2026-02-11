@@ -1,0 +1,42 @@
+@elisoft.notification_HostAddress = http://localhost:5258/
+
+POST http://localhost:5258/api/Notification/send
+Content-Type: application/json
+X-API-KEY: 
+
+{
+  "channel": "Slack",
+  "payload": {
+    "webhookUrl": "",
+    "channelName": "#general",
+    "message": "test"
+  }
+}
+
+###
+
+POST http://localhost:5258/api/Notification/send
+Content-Type: application/json
+X-API-KEY: 
+
+{
+  "channel": "Twilio",
+  "payload": {
+    "to": "",
+    "message": "test"
+  }
+}
+
+###
+
+POST http://localhost:5258/api/Notification/send
+Content-Type: application/json
+X-API-KEY: 
+
+{
+  "channel": "Teams",
+  "payload": {
+    "webhookUrl": "",
+    "message": "test"
+  }
+}

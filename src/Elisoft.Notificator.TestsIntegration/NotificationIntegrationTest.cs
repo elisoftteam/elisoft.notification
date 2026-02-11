@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Elisoft.Slack;
 using Elisoft.Notificator.Configuration.Configuration;
+using Elisoft.Teams.Services;
 using Microsoft.VisualStudio.TestPlatform.TestHost;
 
 
@@ -17,12 +18,14 @@ namespace Elisoft.Notificator.IntegrationTests
         private WebApplicationFactory<Program> _factory;
         private HttpClient _client;
         private ISlackNotificator _slackFake;
+        private ITeamsNotificator _teamsFake;
 
         [SetUp]
         public void SetUp()
         {
             // Arrange
             _slackFake = A.Fake<ISlackNotificator>();
+            _teamsFake = A.Fake<ITeamsNotificator>();
 
             var configFake = A.Fake<IConfig>();
             A.CallTo(() => configFake.ApiKey).Returns("test-api-key");
@@ -33,6 +36,7 @@ namespace Elisoft.Notificator.IntegrationTests
                   builder.ConfigureServices(services =>
                   {
                       services.AddSingleton(_slackFake);
+                      services.AddSingleton(_teamsFake);
                       services.AddSingleton(configFake);
                   });
               });
@@ -93,6 +97,51 @@ namespace Elisoft.Notificator.IntegrationTests
               A<string>._,
               A<string>._))
               .MustHaveHappenedOnceExactly();
+        }
+
+        [Test]
+        public async Task SendNotification_validTeamsPayload_returnsOk()
+        {
+            // Arrange
+            var body = new
+            {
+                channel = "Teams",
+                payload = new
+                {
+                    webhookUrl = "https://outlook.office.com/webhook/test",
+                    message = "hello"
+                }
+            };
+
+            // Act
+            var response = await _client.PostAsJsonAsync("/api/notification/send", body);
+
+            // Assert
+            response.StatusCode.ShouldBe(HttpStatusCode.OK);
+        }
+
+        [Test]
+        public async Task SendNotification_validTeamsPayload_sendsMessageToTeams()
+        {
+            // Arrange
+            var body = new
+            {
+                channel = "Teams",
+                payload = new
+                {
+                    webhookUrl = "https://outlook.office.com/webhook/test",
+                    message = "hello"
+                }
+            };
+
+            // Act
+            await _client.PostAsJsonAsync("/api/notification/send", body);
+
+            // Assert
+            A.CallTo(() => _teamsFake.SendMessageAsync(
+                A<string>._,
+                A<string>._))
+                .MustHaveHappenedOnceExactly();
         }
 
         [Test]

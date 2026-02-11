@@ -153,5 +153,26 @@ namespace Elisoft.Notificator.Tests.Core
             // Assert
             result.Channel.ShouldBe(NotificationEnumChannel.Slack);
         }
+
+        [Test]
+        public void MapToNotification_ValidTeamsChannel_ReturnCorrectEnum()
+        {
+            // Arrange
+            var validPayload = JsonSerializer.Deserialize<JsonElement>("{}");
+            var model = new Message
+            {
+                Channel = "Teams",
+                Payload = validPayload
+            };
+            var sut = new MessageMapper();
+
+
+            // Act
+            var result = sut.MapToNotification(model);
+
+
+            // Assert
+            result.Channel.ShouldBe(NotificationEnumChannel.Teams);
+        }
     }
 }
