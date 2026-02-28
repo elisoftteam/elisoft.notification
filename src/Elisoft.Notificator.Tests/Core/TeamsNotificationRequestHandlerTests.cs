@@ -47,6 +47,7 @@ namespace Elisoft.Notificator.Tests.Core
             // Assert
             A.CallTo(() => _teamsNotificatorFake.SendMessageAsync(
                     command.WebhookUrl,
+                    command.Title,
                     command.Message))
              .MustHaveHappenedOnceExactly();
 
@@ -61,6 +62,7 @@ namespace Elisoft.Notificator.Tests.Core
             var expectedException = new HttpRequestException("Teams API unavailable");
 
             A.CallTo(() => _teamsNotificatorFake.SendMessageAsync(
+                    A<string>._,
                     A<string>._,
                     A<string>._))
              .Throws(expectedException);

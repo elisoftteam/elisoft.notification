@@ -88,11 +88,13 @@ namespace Elisoft.Notificator.Tests.Core
             // Arrange
             var channel = NotificationEnumChannel.Teams;
             var expectedUrl = _fixture.Create<string>();
+            var expectedTitle = _fixture.Create<string>();
             var expectedMessage = _fixture.Create<string>();
 
             var jsonString = JsonSerializer.Serialize(new
             {
                 WebhookUrl = expectedUrl,
+                Title = expectedTitle,
                 Message = expectedMessage
             });
             var jsonPayload = JsonSerializer.Deserialize<JsonElement>(jsonString);
@@ -105,6 +107,7 @@ namespace Elisoft.Notificator.Tests.Core
             // Assert
             var teamsRequest = result.ShouldBeOfType<TeamsNotificationRequest>();
             teamsRequest.WebhookUrl.ShouldBe(expectedUrl);
+            teamsRequest.Title.ShouldBe(expectedTitle);
             teamsRequest.Message.ShouldBe(expectedMessage);
         }
 

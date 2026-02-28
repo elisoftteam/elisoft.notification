@@ -153,6 +153,7 @@ namespace Elisoft.Notificator.IntegrationTests
             // Assert
             A.CallTo(() => _teamsFake.SendMessageAsync(
                 A<string>._,
+                A<string>._,
                 A<string>._))
                 .MustHaveHappenedOnceExactly();
         }

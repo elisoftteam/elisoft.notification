@@ -24,7 +24,7 @@ namespace Elisoft.Notificator.Core.Handlers
         {
             _logger.LogInformation("Sending message via Teams.");
 
-            await _teamsNotificator.SendMessageAsync(command.WebhookUrl, command.Message);
+            await _teamsNotificator.SendMessageAsync(command.WebhookUrl, command.Title, command.Message);
             return await base.HandleAsync(command, cancellationToken);
         }
     }

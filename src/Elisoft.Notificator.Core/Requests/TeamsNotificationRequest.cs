@@ -9,6 +9,7 @@ namespace Elisoft.Notificator.Core.Requests
         }
 
         public string WebhookUrl { get; set; } = string.Empty;
+        public string Title { get; set; } = string.Empty;
         public string Message { get; set; } = string.Empty;
     }
 }

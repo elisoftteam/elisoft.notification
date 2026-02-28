@@ -51,7 +51,8 @@ X-API-KEY:
 {
   "channel": "Teams",
   "payload": {
-    "webhookUrl": "",
-    "message": "test"
+    "webhookUrl": " ",
+    "title": " ",
+    "message": " "
   }
 }
