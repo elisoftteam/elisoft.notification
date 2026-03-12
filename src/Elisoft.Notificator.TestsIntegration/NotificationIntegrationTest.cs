@@ -1,9 +1,10 @@
-﻿using System.Net;
+using System.Net;
 using System.Net.Http.Json;
 using FakeItEasy;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
+using Elisoft.Email.Services;
 using Elisoft.Slack;
 using Elisoft.Notificator.Configuration.Configuration;
 using Elisoft.Pushover.Services;
@@ -23,6 +24,7 @@ namespace Elisoft.Notificator.IntegrationTests
         private ITeamsNotificator _teamsFake;
         private IPushoverNotificator _pushoverFake;
         private ITwilioNotificator _twilioFake;
+        private IEmailNotificator _emailFake;
 
         [SetUp]
         public void SetUp()
@@ -32,6 +34,7 @@ namespace Elisoft.Notificator.IntegrationTests
             _teamsFake = A.Fake<ITeamsNotificator>();
             _pushoverFake = A.Fake<IPushoverNotificator>();
             _twilioFake = A.Fake<ITwilioNotificator>();
+            _emailFake = A.Fake<IEmailNotificator>();
 
             var configFake = A.Fake<IConfig>();
             A.CallTo(() => configFake.ApiKey).Returns("test-api-key");
@@ -40,6 +43,13 @@ namespace Elisoft.Notificator.IntegrationTests
             A.CallTo(() => configFake.TwilioAccountSid).Returns("test-account-sid");
             A.CallTo(() => configFake.TwilioAuthToken).Returns("test-auth-token");
             A.CallTo(() => configFake.TwilioFromNumber).Returns("+15550001111");
+            A.CallTo(() => configFake.EmailSmtpHost).Returns("smtp.test.com");
+            A.CallTo(() => configFake.EmailSmtpPort).Returns(587);
+            A.CallTo(() => configFake.EmailUseSsl).Returns(true);
+            A.CallTo(() => configFake.EmailUsername).Returns("test@test.com");
+            A.CallTo(() => configFake.EmailPassword).Returns("test-password");
+            A.CallTo(() => configFake.EmailFromAddress).Returns("test@test.com");
+            A.CallTo(() => configFake.EmailFromName).Returns("Test");
 
             _factory = new WebApplicationFactory<Program>()
               .WithWebHostBuilder(builder =>
@@ -50,6 +60,7 @@ namespace Elisoft.Notificator.IntegrationTests
                       services.AddSingleton(_teamsFake);
                       services.AddSingleton(_pushoverFake);
                       services.AddSingleton(_twilioFake);
+                      services.AddSingleton(_emailFake);
                       services.AddSingleton(configFake);
                   });
               });
@@ -314,6 +325,87 @@ namespace Elisoft.Notificator.IntegrationTests
 
             // Assert
             response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
+        }
+
+        [Test]
+        public async Task SendNotification_validEmailPayload_returnsOk()
+        {
+            // Arrange
+            var body = new
+            {
+                channel = "Email",
+                payload = new
+                {
+                    to = "recipient@example.com",
+                    subject = "Test Subject",
+                    message = "hello",
+                    isBodyHtml = false
+                }
+            };
+
+            // Act
+            var response = await _client.PostAsJsonAsync("/api/notification/send", body);
+
+            // Assert
+            response.StatusCode.ShouldBe(HttpStatusCode.OK);
+        }
+
+        [Test]
+        public async Task SendNotification_validEmailPayload_sendsEmail()
+        {
+            // Arrange
+            var body = new
+            {
+                channel = "Email",
+                payload = new
+                {
+                    to = "recipient@example.com",
+                    subject = "Test Subject",
+                    message = "hello",
+                    isBodyHtml = false
+                }
+            };
+
+            // Act
+            await _client.PostAsJsonAsync("/api/notification/send", body);
+
+            // Assert
+            A.CallTo(() => _emailFake.SendMessageAsync(
+                A<string>._,
+                A<int>._,
+                A<bool>._,
+                A<string>._,
+                A<string>._,
+                A<string>._,
+                A<string?>._,
+                A<string>._,
+                A<string>._,
+                A<string>._,
+                A<bool>._))
+                .MustHaveHappenedOnceExactly();
+        }
+
+        [Test]
+        public async Task SendNotification_validEmailHtmlPayload_returnsOk()
+        {
+            // Arrange
+            var body = new
+            {
+                channel = "Email",
+                payload = new
+                {
+                    to = "recipient@example.com",
+                    subject = "HTML Test",
+                    message = "<h1>Hello</h1>",
+                    isBodyHtml = true
+                }
+            };
+
+            // Act
+            var response = await _client.PostAsJsonAsync("/api/notification/send", body);
+
+            // Assert
+            response.StatusCode.ShouldBe(HttpStatusCode.OK);
         }
     }
 }

@@ -167,6 +167,37 @@ namespace Elisoft.Notificator.Tests.Core
         }
 
         [Test]
+        public void CreateRequest_ValidEmailPayload_ReturnEmailNotificationRequestObject()
+        {
+            // Arrange
+            var channel = NotificationEnumChannel.Email;
+            var expectedTo = _fixture.Create<string>();
+            var expectedSubject = _fixture.Create<string>();
+            var expectedMessage = _fixture.Create<string>();
+
+            var jsonString = JsonSerializer.Serialize(new
+            {
+                To = expectedTo,
+                Subject = expectedSubject,
+                Message = expectedMessage,
+                IsBodyHtml = true
+            });
+            var jsonPayload = JsonSerializer.Deserialize<JsonElement>(jsonString);
+
+
+            // Act
+            var result = _sut.CreateRequest(channel, jsonPayload);
+
+
+            // Assert
+            var emailRequest = result.ShouldBeOfType<EmailNotificationRequest>();
+            emailRequest.To.ShouldBe(expectedTo);
+            emailRequest.Subject.ShouldBe(expectedSubject);
+            emailRequest.Message.ShouldBe(expectedMessage);
+            emailRequest.IsBodyHtml.ShouldBeTrue();
+        }
+
+        [Test]
         public void CreateRequest_PayloadIsNull_ThrowArgumentException()
         {
             // Arrange

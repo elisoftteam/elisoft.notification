@@ -216,5 +216,26 @@ namespace Elisoft.Notificator.Tests.Core
             // Assert
             result.Channel.ShouldBe(NotificationEnumChannel.Twilio);
         }
+
+        [Test]
+        public void MapToNotification_ValidEmailChannel_ReturnCorrectEnum()
+        {
+            // Arrange
+            var validPayload = JsonSerializer.Deserialize<JsonElement>("{}");
+            var model = new Message
+            {
+                Channel = "Email",
+                Payload = validPayload
+            };
+            var sut = new MessageMapper();
+
+
+            // Act
+            var result = sut.MapToNotification(model);
+
+
+            // Assert
+            result.Channel.ShouldBe(NotificationEnumChannel.Email);
+        }
     }
 }

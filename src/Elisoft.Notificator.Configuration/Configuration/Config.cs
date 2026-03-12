@@ -93,5 +93,85 @@ namespace Elisoft.Notificator.Configuration.Configuration
                 return _config["Pushover:UserKey"] ?? "";
             }
         }
+
+        public string EmailSmtpHost
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(_config["Email:SmtpHost"]))
+                {
+                    throw new Exception("Email SmtpHost is not set in appsettings.json");
+                }
+
+                return _config["Email:SmtpHost"] ?? "";
+            }
+        }
+
+        public int EmailSmtpPort
+        {
+            get
+            {
+                if (!int.TryParse(_config["Email:SmtpPort"], out var port))
+                {
+                    throw new Exception("Email SmtpPort is not set correctly in appsettings.json");
+                }
+
+                return port;
+            }
+        }
+
+        public bool EmailUseSsl
+        {
+            get
+            {
+                if (!bool.TryParse(_config["Email:UseSsl"], out var useSsl))
+                {
+                    throw new Exception("Email UseSsl is not set correctly in appsettings.json");
+                }
+
+                return useSsl;
+            }
+        }
+
+        public string EmailUsername
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(_config["Email:Username"]))
+                {
+                    throw new Exception("Email Username is not set in appsettings.json");
+                }
+
+                return _config["Email:Username"] ?? "";
+            }
+        }
+
+        public string EmailPassword
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(_config["Email:Password"]))
+                {
+                    throw new Exception("Email Password is not set in appsettings.json");
+                }
+
+                return _config["Email:Password"] ?? "";
+            }
+        }
+
+        public string EmailFromAddress
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(_config["Email:FromAddress"]))
+                {
+                    throw new Exception("Email FromAddress is not set in appsettings.json");
+                }
+
+                return _config["Email:FromAddress"] ?? "";
+            }
+        }
+
+        public string? EmailFromName => _config["Email:FromName"];
     }
 }

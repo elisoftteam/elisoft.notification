@@ -3,11 +3,12 @@
 namespace Elisoft.Notificator.Core.Enums
 {
   [JsonConverter(typeof(JsonStringEnumConverter))]
-  public enum NotificationEnumChannel
-    {
-        Slack,
-        Teams,
-        Twilio,
-        Pushover
-    }
+   public enum NotificationEnumChannel
+     {
+         Slack,
+         Teams,
+         Twilio,
+         Pushover,
+         Email
+     }
 }

@@ -1,11 +1,11 @@
 # Elisoft.Notificator
 
-**Elisoft.Notificator** is a central API service acting as a universal notification gateway. It allows for unified message sending to multiple communication channels (such as Microsoft Teams, Slack, Pushover, Twilio) using a single, consistent HTTP entry point.
+**Elisoft.Notificator** is a central API service acting as a universal notification gateway. It allows for unified message sending to multiple communication channels (such as Microsoft Teams, Slack, Pushover, Twilio, Email) using a single, consistent HTTP entry point.
 
 ## Key Features
 * **Single API Endpoint** - All notifications are sent to the same address: `POST /api/Notification/send`.
 * **Extensibility** - Ability to add new channels (e.g., Mail, Discord, etc.) using appropriate design patterns (`RequestFactory` and `IRequestHandler` implementations).
-* **Custom Libraries (NuGet)** - The project relies on dedicated, custom-built libraries for sending logic (`Elisoft.Teams`, `Elisoft.Slack`, `Elisoft.Twilio`, `Elisoft.Pushover`).
+* **Custom Libraries (NuGet)** - The project relies on dedicated, custom-built libraries for sending logic (`Elisoft.Teams`, `Elisoft.Slack`, `Elisoft.Twilio`, `Elisoft.Pushover`, `Elisoft.Email`).
 * **Authorization** - The API is secured with a key passed in the header. It must be provided as `X-API-KEY`.
 
 ## How to use the API?
@@ -81,11 +81,26 @@ Primarily used for sending SMS (or Voice) messages.
 }
 ```
 
+### 5. Email
+Used for sending SMTP email messages through the dedicated `Elisoft.Email` library backed by MailKit.
+
+```json
+{
+  "channel": "Email",
+  "payload": {
+    "to": "receiver@example.com",
+    "subject": "Notification Title",
+    "message": "Email content",
+    "isBodyHtml": false
+  }
+}
+```
+
 ## Architecture and Design
 
 The application is built in a classic multi-layered approach (Clean Architecture / CQRS pattern):
 * `Elisoft.Notificator.Api` - exposes the HTTP contact point (`NotificationController`). Maps incoming JSON to a specific dedicated class (e.g., `TeamsNotificationRequest`) using a converter class (e.g., `RequestFactory`).
 * `Elisoft.Notificator.Core` - implements business logic. Request classes fall into handlers (thanks to the *Paramore.Brighter* library and `RequestHandlerAsync` implementations), and then the handler calls an external dependency which makes the underlying query to the given external API.
-* For specific solutions and communication channels, the API has linked, nested repositories (as NuGet or project references, e.g., `Elisoft.Teams`, `Elisoft.Slack`).
+* For specific solutions and communication channels, the API has linked, nested repositories (as NuGet or project references, e.g., `Elisoft.Teams`, `Elisoft.Slack`, `Elisoft.Email`).
 
 To run the application, it is recommended to start the entire solution and perform test requests by inserting your configured environment security key into the `X-API-KEY` header.

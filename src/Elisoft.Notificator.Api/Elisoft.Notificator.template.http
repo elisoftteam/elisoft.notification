@@ -2,7 +2,7 @@
 
 POST http://localhost:5258/api/Notification/send
 Content-Type: application/json
-X-API-KEY: 
+X-API-KEY:
 
 {
   "channel": "Slack",
@@ -17,7 +17,23 @@ X-API-KEY:
 
 POST http://localhost:5258/api/Notification/send
 Content-Type: application/json
-X-API-KEY: 
+X-API-KEY:
+
+{
+  "channel": "Email",
+  "payload": {
+    "to": "receiver@example.com",
+    "subject": "Notificator",
+    "message": "test",
+    "isBodyHtml": false
+  }
+}
+
+###
+
+POST http://localhost:5258/api/Notification/send
+Content-Type: application/json
+X-API-KEY:
 
 {
   "channel": "Pushover",
@@ -32,7 +48,7 @@ X-API-KEY:
 
 POST http://localhost:5258/api/Notification/send
 Content-Type: application/json
-X-API-KEY: 
+X-API-KEY:
 
 {
   "channel": "Twilio",
@@ -46,7 +62,7 @@ X-API-KEY:
 
 POST http://localhost:5258/api/Notification/send
 Content-Type: application/json
-X-API-KEY: 
+X-API-KEY:
 
 {
   "channel": "Teams",
@@ -54,5 +70,20 @@ X-API-KEY:
     "webhookUrl": " ",
     "title": " ",
     "message": " "
+  }
+}
+
+###
+POST http://localhost:5258/api/Notification/send
+Content-Type: application/json
+X-API-KEY: 
+
+{
+  "channel": "Email",
+  "payload": {
+    "to": "[EMAIL_ADDRESS]",
+    "subject": " ",
+    "message": " m",
+    "isBodyHtml": false
   }
 }

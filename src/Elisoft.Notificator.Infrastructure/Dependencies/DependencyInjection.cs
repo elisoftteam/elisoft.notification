@@ -1,4 +1,5 @@
-﻿using Elisoft.Notificator.Configuration.Configuration;
+using Elisoft.Email.Services;
+using Elisoft.Notificator.Configuration.Configuration;
 using Elisoft.Notificator.Core.Factories;
 using Elisoft.Notificator.Core.Handlers;
 using Elisoft.Notificator.Core.Services;
@@ -21,12 +22,14 @@ namespace Elisoft.Notificator.Infrastructure.Dependencies
             services.AddSingleton<IConfig, Config>();
             services.AddScoped<IRequestFactory, RequestFactory>();
             services.AddScoped<INotificationService, NotificationService>();
+            services.AddScoped<IEmailNotificator, EmailNotificator>();
             services.AddHttpClient<ISlackNotificator, SlackNotificator>();
             services.AddHttpClient<ITeamsNotificator, TeamsNotificator>();
             services.AddHttpClient<ITwilioNotificator, TwilioNotificator>();
             services.AddHttpClient<IPushoverNotificator, PushoverNotificator>();
             services.AddBrighter()
                 .AutoFromAssemblies(new[] {
+                    typeof(EmailNotificationRequestHandler).Assembly,
                     typeof(SlackNotificationRequestHandler).Assembly,
                     typeof(TeamsNotificationRequestHandler).Assembly,
                     typeof(TwilioNotificationRequestHandler).Assembly,

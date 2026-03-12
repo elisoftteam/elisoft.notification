@@ -16,5 +16,12 @@ namespace Elisoft.Notificator.Configuration.Configuration
     string TwilioFromNumber { get; }
     string PushoverApiToken { get; }
     string PushoverUserKey { get; }
+    string EmailSmtpHost { get; }
+    int EmailSmtpPort { get; }
+    bool EmailUseSsl { get; }
+    string EmailUsername { get; }
+    string EmailPassword { get; }
+    string EmailFromAddress { get; }
+    string? EmailFromName { get; }
   }
 }
